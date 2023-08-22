@@ -1,9 +1,9 @@
-package top.guoziyang.rpc.exception;
+package com.yzy.rpc.exception;
 
 /**
  * 序列化异常
  *
- * @author ziyang
+ * @author yzy
  */
 public class SerializeException extends RuntimeException {
     public SerializeException(String msg) {

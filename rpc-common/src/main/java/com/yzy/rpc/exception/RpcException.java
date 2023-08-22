@@ -1,11 +1,12 @@
-package top.guoziyang.rpc.exception;
+package com.yzy.rpc.exception;
 
-import top.guoziyang.rpc.enumeration.RpcError;
+
+import com.yzy.rpc.enumeration.RpcError;
 
 /**
  * RPC调用异常
  *
- * @author ziyang
+ * @author yzy
  */
 public class RpcException extends RuntimeException {
 

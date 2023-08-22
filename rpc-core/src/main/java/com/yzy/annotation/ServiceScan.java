@@ -1,9 +1,18 @@
 package com.yzy.annotation;
- /**
- * @description TODO
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
  * @author yzy
- * @date 2023/8/22 13:57
  * @version 1.0
+ * @description ServiceScan注解
+ * @date 2023/8/22 13:57
  */
-public class ServiceScan {
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ServiceScan {
+    String value() default "";
 }

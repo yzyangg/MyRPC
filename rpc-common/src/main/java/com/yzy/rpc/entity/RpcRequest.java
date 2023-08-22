@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @author yzy
  * @version 1.0
- * @description TODO
+ * @description rpc请求
  * @date 2023/8/22 9:43
  */
 @Data
