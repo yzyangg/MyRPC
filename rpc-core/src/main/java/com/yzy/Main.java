@@ -9,9 +9,13 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-//        testSerializer();
+
+
     }
 
+    /**
+     * 测试序列化
+     */
     private static void testSerializer() {
         RpcRequest rpcRequest = new RpcRequest();
         rpcRequest.setRequestId("123");
