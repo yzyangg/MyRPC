@@ -1,14 +1,15 @@
 package com.yzy.serializer;
 
+import com.yzy.rpc.enumeration.SerializerCode;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static io.protostuff.runtime.RuntimeSchema.getSchema;
 
 /**
  * @author yzy
@@ -18,8 +19,8 @@ import static io.protostuff.runtime.RuntimeSchema.getSchema;
  */
 public class ProtobufSerializer implements CommonSerializer {
 
-    private LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
-    private Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
+    private final LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+    private final Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
 
 
     @Override
@@ -45,6 +46,20 @@ public class ProtobufSerializer implements CommonSerializer {
 
     @Override
     public int getCode() {
-        return 0;
+        return SerializerCode.valueOf("PROTOBUF").getCode();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Schema getSchema(Class clazz) {
+        Schema schema = schemaCache.get(clazz);
+        if (Objects.isNull(schema)) {
+            // 这个schema通过RuntimeSchema进行懒创建并缓存
+            // 所以可以一直调用RuntimeSchema.getSchema(),这个方法是线程安全的
+            schema = RuntimeSchema.getSchema(clazz);
+            if (Objects.nonNull(schema)) {
+                schemaCache.put(clazz, schema);
+            }
+        }
+        return schema;
     }
 }

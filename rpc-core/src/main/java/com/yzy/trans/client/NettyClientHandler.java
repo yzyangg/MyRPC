@@ -34,14 +34,15 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<RpcResponse>
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse response) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse msg) throws Exception {
 
         try {
-            logger.info(String.format("客户端接收到消息: %s", response));
-            unprocessedRequests.complete(response);
+            logger.info(String.format("客户端接收到消息: %s", msg));
+            //读到了消息就代表该类已经被处理了，设置值到future中
+            unprocessedRequests.complete(msg);
         } catch (Exception e) {
             // 释放资源 (引用计数法)
-            ReferenceCountUtil.release(response);
+            ReferenceCountUtil.release(msg);
         }
 
     }

@@ -70,7 +70,7 @@ public class NettyServer extends AbstractRpcServer {
                                     .addLast(new NettyServerHandler());
                         }
                     });
-            ChannelFuture future = null;
+            ChannelFuture future;
             // 阻塞直到绑定成功
             future = serverBootstrap.bind(host, port).sync();
             // 阻塞直到服务器channel关闭

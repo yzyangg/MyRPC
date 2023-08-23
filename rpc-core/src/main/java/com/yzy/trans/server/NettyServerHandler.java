@@ -2,6 +2,7 @@ package com.yzy.trans.server;
 
 import com.yzy.handler.RequestHandler;
 import com.yzy.rpc.entity.RpcRequest;
+import com.yzy.rpc.entity.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
@@ -27,22 +28,22 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest msg) throws Exception {
         try {
-            if (rpcRequest.getHeartBeat()) {
+            if (msg.getHeartBeat()) {
                 logger.info("接收到客户端心跳包...");
                 return;
             }
-            logger.info("服务器接收到请求: {}", rpcRequest);
-            Object result = requestHandler.handle(rpcRequest);
+            logger.info("服务器接收到请求: {}", msg);
+            Object result = requestHandler.handle(msg);
 
             if (channelHandlerContext.channel().isActive() && channelHandlerContext.channel().isWritable()) {
-                channelHandlerContext.writeAndFlush(result);
+                channelHandlerContext.writeAndFlush(RpcResponse.success(result, msg.getRequestId()));
             } else {
                 logger.error("通道不可写");
             }
         } finally {
-            ReferenceCountUtil.release(rpcRequest);
+            ReferenceCountUtil.release(msg);
         }
     }
 

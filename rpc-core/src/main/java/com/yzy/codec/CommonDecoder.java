@@ -20,7 +20,7 @@ import java.util.List;
  * @description 解码器
  * @date 2023/8/22 14:04
  */
-public class CommonDecoder extends ReplayingDecoder {
+public class CommonDecoder extends ReplayingDecoder<Object> {
     private static final Logger logger = LoggerFactory.getLogger(CommonDecoder.class);
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
@@ -51,17 +51,17 @@ public class CommonDecoder extends ReplayingDecoder {
             packageClass = RpcResponse.class;
         } else {
             logger.error("不识别的数据包: {}", packageCode);
-            throw new RpcException(RpcError.UNKNOWN_ERROR);
+            throw new RpcException(RpcError.UNKNOWN_PACKAGE_TYPE);
         }
 
         // 序列化器code
         int serializerCode = byteBuf.readInt();
-        
+
         // 获得序列化器
         CommonSerializer serializer = CommonSerializer.getByCode(serializerCode);
         if (serializer == null) {
             logger.error("不识别的反序列化器: {}", serializerCode);
-            throw new RpcException(RpcError.UNKNOWN_ERROR);
+            throw new RpcException(RpcError.UNKNOWN_PACKAGE_TYPE);
         }
 
         // 数据长度

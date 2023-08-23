@@ -43,13 +43,25 @@ public class ChannelProvider {
 
         // 生成key 地址 + 序列化方式
         String key = inetSocketAddress.toString() + serializer.getCode();
+
+        if (channels.containsKey(key)) {
+            Channel channel = channels.get(key);
+            // 如果channel可用，直接返回
+            if (channel != null && channel.isActive()) {
+                return channel;
+            } else {
+                // 如果channel不可用，从map中移除
+                channels.remove(key);
+            }
+        }
+
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) {
-                socketChannel.pipeline().addLast(new CommonEncoder(serializer));
-                socketChannel.pipeline().addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
-                socketChannel.pipeline().addLast(new CommonDecoder());
-                socketChannel.pipeline().addLast(new NettyClientHandler());
+                socketChannel.pipeline().addLast(new CommonEncoder(serializer))
+                        .addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS))
+                        .addLast(new CommonDecoder())
+                        .addLast(new NettyClientHandler());
             }
         });
 

@@ -1,5 +1,6 @@
 package com.yzy.registry;
 
+import com.yzy.rpc.enumeration.RpcError;
 import com.yzy.rpc.exception.RpcException;
 import com.yzy.rpc.util.NacosUtil;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class NacosServiceRegistry implements ServiceRegistry {
             NacosUtil.registerService(serviceName, inetSocketAddress);
         } catch (Exception e) {
             logger.error("注册服务时有错误发生:", e);
-            throw new RpcException("注册服务时有错误发生:", e);
+            throw new RpcException(RpcError.REGISTER_SERVICE_FAILED);
         }
     }
 }

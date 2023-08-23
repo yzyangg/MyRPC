@@ -13,7 +13,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @description 编码器
  * @date 2023/8/22 14:04
  */
-public class CommonEncoder extends MessageToByteEncoder {
+public class CommonEncoder extends MessageToByteEncoder<Object> {
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
     private final CommonSerializer serializer;

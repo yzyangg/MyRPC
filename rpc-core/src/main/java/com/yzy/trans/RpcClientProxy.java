@@ -66,8 +66,10 @@ public class RpcClientProxy implements InvocationHandler {
                 method.getName(),
                 args, method.getParameterTypes(), false);
 
-        RpcResponse rpcResponse = null;
-        CompletableFuture<RpcResponse> future = (CompletableFuture<RpcResponse>) client.sendRequest(rpcRequest, method.getDeclaringClass().getName());
+        RpcResponse rpcResponse;
+
+        // 发送请求，future为异步结果
+        CompletableFuture<RpcResponse> future = (CompletableFuture<RpcResponse>) client.sendRequest(rpcRequest);
         try {
             rpcResponse = future.get();
         } catch (InterruptedException | ExecutionException e) {

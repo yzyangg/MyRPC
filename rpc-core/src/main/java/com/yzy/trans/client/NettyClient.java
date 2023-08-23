@@ -46,11 +46,11 @@ public class NettyClient implements RpcClient {
     /**
      * 服务发现
      */
-    private ServiceDiscovery serviceDiscovery;
+    private final ServiceDiscovery serviceDiscovery;
     /**
      * 序列化方式
      */
-    private CommonSerializer serializer;
+    private final CommonSerializer serializer;
 
     public NettyClient() {
         this(DEFAULT_SERIALIZER, new RandomLoadBalancer());
@@ -69,16 +69,21 @@ public class NettyClient implements RpcClient {
     /**
      * 未处理的请求
      */
-    private UnprocessedRequests unprocessedRequests;
+    private final UnprocessedRequests unprocessedRequests;
 
     @Override
-    public CompletableFuture<RpcResponse> sendRequest(RpcRequest rpcRequest, String serviceName) {
+    public CompletableFuture<RpcResponse> sendRequest(RpcRequest rpcRequest) {
+        if (serializer == null) {
+            logger.error("未设置序列化器");
+            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
+        }
+
         CompletableFuture<RpcResponse> future = new CompletableFuture<>();
         try {
-            InetSocketAddress inetSocketAddress = serviceDiscovery.lookUpService(serviceName);
+            InetSocketAddress inetSocketAddress = serviceDiscovery.lookUpService(rpcRequest.getInterfaceName());
             if (inetSocketAddress == null) {
-                logger.error("找不到对应的服务: {}", serviceName);
-                throw new RpcException(RpcError.SERVICE_NOT_FOUND, serviceName);
+                logger.error("找不到对应的服务: {}", rpcRequest.getInterfaceName());
+                throw new RpcException(RpcError.SERVICE_NOT_FOUND, rpcRequest.getInterfaceName());
             }
 
 
@@ -90,9 +95,10 @@ public class NettyClient implements RpcClient {
                 return null;
             }
 
+            // 放入未处理的请求类之中
             unprocessedRequests.put(rpcRequest.getRequestId(), future);
 
-            //发送请求，添加回调函数
+            // 发送请求，添加回调函数
             channel.writeAndFlush(rpcRequest).addListener(
                     // 异步发送消息
                     (ChannelFutureListener) one -> {

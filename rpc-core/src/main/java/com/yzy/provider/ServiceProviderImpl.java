@@ -24,9 +24,9 @@ public class ServiceProviderImpl implements ServiceProvider {
     /**
      * 添加服务
      *
-     * @param service
-     * @param serviceName
-     * @param <T>
+     * @param service     服务实例对象
+     * @param serviceName 服务名
+     * @param <T>         服务类型
      */
     @Override
     public <T> void addServiceProvider(T service, String serviceName) {

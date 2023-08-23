@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * @author yzy
  * @version 1.0
- * @description 处理rpcRequest
+ * @description 过程调用的处理器
  * @date 2023/8/22 16:16
  */
 public class RequestHandler {
@@ -29,8 +29,8 @@ public class RequestHandler {
     /**
      * 处理rpcRequest
      *
-     * @param rpcRequest
-     * @return
+     * @param rpcRequest rpcRequest
+     * @return 返回调用结果
      */
     public Object handle(RpcRequest rpcRequest) {
         Object service = serviceProvider.getServiceProvider(rpcRequest.getInterfaceName());
@@ -45,7 +45,7 @@ public class RequestHandler {
      * @return
      */
     private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) {
-        Object result = null;
+        Object result;
         try {
             Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
             result = method.invoke(service, rpcRequest.getParameters());

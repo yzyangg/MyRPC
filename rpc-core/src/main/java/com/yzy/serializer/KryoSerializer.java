@@ -20,12 +20,13 @@ import java.io.ByteArrayOutputStream;
  * @date 2023/8/22 14:08
  */
 public class KryoSerializer implements CommonSerializer {
-    public static final Logger logger = LoggerFactory.getLogger(KryoSerializer.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(KryoSerializer.class);
 
     private static final ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
-        kryo.register(RpcRequest.class);
         kryo.register(RpcResponse.class);
+        kryo.register(RpcRequest.class);
         kryo.setReferences(true);
         kryo.setRegistrationRequired(false);
         return kryo;
@@ -33,9 +34,8 @@ public class KryoSerializer implements CommonSerializer {
 
     @Override
     public byte[] serialize(Object obj) {
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            Output output = new Output(byteArrayOutputStream);
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             Output output = new Output(byteArrayOutputStream)) {
             Kryo kryo = kryoThreadLocal.get();
             kryo.writeObject(output, obj);
             kryoThreadLocal.remove();
@@ -48,10 +48,9 @@ public class KryoSerializer implements CommonSerializer {
 
     @Override
     public Object deserialize(byte[] bytes, Class<?> clazz) {
-        try {
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             Input input = new Input(byteArrayInputStream)) {
             Kryo kryo = kryoThreadLocal.get();
-            Input input = new Input(byteArrayInputStream);
             Object o = kryo.readObject(input, clazz);
             kryoThreadLocal.remove();
             return o;

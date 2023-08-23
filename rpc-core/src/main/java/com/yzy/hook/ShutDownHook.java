@@ -1,5 +1,6 @@
 package com.yzy.hook;
 
+import com.yzy.rpc.factory.ThreadPoolFactory;
 import com.yzy.rpc.util.NacosUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,11 @@ public class ShutDownHook {
         logger.info("添加钩子函数，关闭后清除所有服务");
         // 向JVM注册一个关闭的钩子线程，当JVM关闭的时候，会启动一个线程，执行系统中已经设置的所有通过方法addShutdownHook添加的钩子线程
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // 清除所有服务
             NacosUtil.clearRegistry();
-            logger.info("关闭后清除所有服务");
+            // 关闭线程池
+            ThreadPoolFactory.shutDownAll();
+            logger.info("JVM关闭，清除所有服务");
         }));
 
     }

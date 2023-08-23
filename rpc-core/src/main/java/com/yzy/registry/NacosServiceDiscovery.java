@@ -28,7 +28,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
 
 
     /**
-     * 从nacos中获取服务
+     * 从nacos中获取服务地址
      *
      * @param serviceName 服务名
      * @return

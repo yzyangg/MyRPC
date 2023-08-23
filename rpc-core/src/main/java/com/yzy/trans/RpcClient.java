@@ -19,6 +19,6 @@ public interface RpcClient {
      * @param serviceName
      * @return
      */
-    Object sendRequest(RpcRequest rpcRequest, String serviceName);
+    Object sendRequest(RpcRequest rpcRequest);
 
 }
