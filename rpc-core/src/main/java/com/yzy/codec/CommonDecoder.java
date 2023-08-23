@@ -56,6 +56,7 @@ public class CommonDecoder extends ReplayingDecoder {
 
         // 序列化器code
         int serializerCode = byteBuf.readInt();
+        
         // 获得序列化器
         CommonSerializer serializer = CommonSerializer.getByCode(serializerCode);
         if (serializer == null) {

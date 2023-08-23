@@ -1,5 +1,8 @@
 package com.yzy.trans.client;
 
+import com.yzy.loadbalancer.LoadBalancer;
+import com.yzy.loadbalancer.RandomLoadBalancer;
+import com.yzy.registry.NacosServiceDiscovery;
 import com.yzy.registry.ServiceDiscovery;
 import com.yzy.rpc.entity.RpcRequest;
 import com.yzy.rpc.entity.RpcResponse;
@@ -43,15 +46,30 @@ public class NettyClient implements RpcClient {
     /**
      * 服务发现
      */
-    private final ServiceDiscovery serviceDiscovery = SingletonFactory.getInstance(ServiceDiscovery.class);
+    private ServiceDiscovery serviceDiscovery;
     /**
      * 序列化方式
      */
-    private final CommonSerializer serializer = CommonSerializer.getByCode(DEFAULT_SERIALIZER);
+    private CommonSerializer serializer;
+
+    public NettyClient() {
+        this(DEFAULT_SERIALIZER, new RandomLoadBalancer());
+    }
+
+    public NettyClient(Integer serializer) {
+        this(serializer, new RandomLoadBalancer());
+    }
+
+    public NettyClient(Integer serializer, LoadBalancer loadBalancer) {
+        this.serviceDiscovery = new NacosServiceDiscovery(loadBalancer);
+        this.serializer = CommonSerializer.getByCode(serializer);
+        this.unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
+    }
+
     /**
      * 未处理的请求
      */
-    private final UnprocessedRequests unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
+    private UnprocessedRequests unprocessedRequests;
 
     @Override
     public CompletableFuture<RpcResponse> sendRequest(RpcRequest rpcRequest, String serviceName) {

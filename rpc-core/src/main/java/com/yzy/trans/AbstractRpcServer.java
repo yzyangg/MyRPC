@@ -76,6 +76,7 @@ public abstract class AbstractRpcServer implements RpcServer {
 
     @Override
     public <T> void publishService(T service, String serviceName) {
+        logger.info("发布服务：{} {}", serviceName, service.getClass().getCanonicalName());
         serviceProvider.addServiceProvider(service, serviceName);
         serviceRegistry.register(serviceName, new InetSocketAddress(host, port));
     }

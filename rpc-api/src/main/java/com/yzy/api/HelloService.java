@@ -6,5 +6,6 @@ package com.yzy.api;
  * @description TODO
  * @date 2023/8/22 9:39
  */
-public class HelloService {
+public interface HelloService {
+    String hello(HelloObject message);
 }

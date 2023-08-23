@@ -22,7 +22,7 @@ public class ShutDownHook {
      * 关闭后清除所有服务
      */
     public void addClearAllHock() {
-        logger.info("关闭后清除所有服务");
+        logger.info("添加钩子函数，关闭后清除所有服务");
         // 向JVM注册一个关闭的钩子线程，当JVM关闭的时候，会启动一个线程，执行系统中已经设置的所有通过方法addShutdownHook添加的钩子线程
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             NacosUtil.clearRegistry();

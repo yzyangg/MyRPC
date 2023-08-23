@@ -37,7 +37,8 @@ public enum RpcError {
 
     FAILED_TO_CONNECT_TO_SERVICE_REGISTRY("连接注册中心失败"),
 
-    REGISTER_SERVICE_FAILED("注册服务失败");
+    REGISTER_SERVICE_FAILED("注册服务失败"),
+    SERVER_STARTUP_FAILURE("服务端启动失败");
 
     private final String message;
 }

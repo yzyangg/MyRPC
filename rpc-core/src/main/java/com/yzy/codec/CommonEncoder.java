@@ -25,9 +25,9 @@ public class CommonEncoder extends MessageToByteEncoder {
     /**
      * 编码
      *
-     * @param channelHandlerContext
-     * @param msg
-     * @param byteBuf
+     * @param channelHandlerContext 上下文
+     * @param msg                   消息
+     * @param byteBuf               缓冲区
      * @throws Exception
      */
     @Override
