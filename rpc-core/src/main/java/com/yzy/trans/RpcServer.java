@@ -9,6 +9,9 @@ import com.yzy.serializer.CommonSerializer;
  * @date 2023/8/22 18:14
  */
 public interface RpcServer {
+    /**
+     * 默认序列化方式
+     */
     int DEFAULT_SERVER_PORT = CommonSerializer.DEFAULT_SERIALIZER;
 
     /**
@@ -24,4 +27,5 @@ public interface RpcServer {
      * @param <T>
      */
     <T> void publishService(T service, String serviceName);
+
 }

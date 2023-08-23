@@ -2,6 +2,7 @@ package com.yzy.trans;
 
 import com.yzy.rpc.entity.RpcRequest;
 import com.yzy.rpc.entity.RpcResponse;
+import com.yzy.rpc.util.MessageChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,23 @@ public class RpcClientProxy implements InvocationHandler {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, this);
     }
 
+    /**
+     * 在代理实例上处理方法调用并返回结果
+     *
+     * @param proxy  the proxy instance that the method was invoked on
+     * @param method the {@code Method} instance corresponding to
+     *               the interface method invoked on the proxy instance.  The declaring
+     *               class of the {@code Method} object will be the interface that
+     *               the method was declared in, which may be a superinterface of the
+     *               proxy interface that the proxy class inherits the method through.
+     * @param args   an array of objects containing the values of the
+     *               arguments passed in the method invocation on the proxy instance,
+     *               or {@code null} if interface method takes no arguments.
+     *               Arguments of primitive types are wrapped in instances of the
+     *               appropriate primitive wrapper class, such as
+     *               {@code java.lang.Integer} or {@code java.lang.Boolean}.
+     * @return
+     */
     @Override
     @SuppressWarnings("unchecked")
     public Object invoke(Object proxy, Method method, Object[] args) {
@@ -56,7 +74,8 @@ public class RpcClientProxy implements InvocationHandler {
             logger.error("方法调用请求发送失败", e);
             return null;
         }
+        MessageChecker.check(rpcRequest, rpcResponse);
 
-        return null;
+        return rpcResponse.getData();
     }
 }

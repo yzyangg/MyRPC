@@ -20,6 +20,16 @@ import java.util.jar.JarFile;
  */
 public class ReflectUtil {
     /**
+     * 获取调用者的类名
+     *
+     * @return
+     */
+    public static String getStackTrace() {
+        StackTraceElement[] stack = new Throwable().getStackTrace();
+        return stack[stack.length - 1].getClassName();
+    }
+
+    /**
      * 根据类名获取类
      *
      * @param className
