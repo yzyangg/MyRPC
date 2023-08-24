@@ -30,14 +30,17 @@ public class ChannelProvider {
 
     private static final Bootstrap bootstrap = initializeBootstrap();
 
+    /**
+     * 存放channel,服务端地址 + 序列化方式 -> channel
+     */
     public static final Map<String, Channel> channels = new ConcurrentHashMap<>();
 
     /**
      * 获取channel对象
      *
-     * @param inetSocketAddress
-     * @param serializer
-     * @return
+     * @param inetSocketAddress 服务端地址
+     * @param serializer        序列化方式
+     * @return channel
      */
     public static Channel get(InetSocketAddress inetSocketAddress, CommonSerializer serializer) {
 
@@ -78,10 +81,10 @@ public class ChannelProvider {
     }
 
     /**
-     * 连接服务端
+     * 连接服务端，添加监听器，返回channel
      *
-     * @param inetSocketAddress
-     * @return
+     * @param inetSocketAddress 服务端地址
+     * @return channel
      */
     private static Channel connect(InetSocketAddress inetSocketAddress) throws ExecutionException, InterruptedException {
         CompletableFuture<Channel> completableFuture = new CompletableFuture<>();

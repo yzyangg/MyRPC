@@ -64,7 +64,7 @@ public class NettyServer extends AbstractRpcServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
-                                    .addLast(new IdleStateHandler(30, 0, 0, TimeUnit.SECONDS))
+                                    .addLast(new IdleStateHandler(300000, 0, 0, TimeUnit.SECONDS))
                                     .addLast(new CommonEncoder(serializer))
                                     .addLast(new CommonDecoder())
                                     .addLast(new NettyServerHandler());

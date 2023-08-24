@@ -19,6 +19,6 @@ public class HelloServiceImpl implements HelloService {
     @Override
     public String hello(HelloObject message) {
         logger.info("接收到消息：{}", message.getMessage());
-        return "这是Impl1方法";
+        return "RPC调用成功!";
     }
 }

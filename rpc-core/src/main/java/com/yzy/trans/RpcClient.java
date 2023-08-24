@@ -15,9 +15,8 @@ public interface RpcClient {
     /**
      * 发送RPC请求
      *
-     * @param rpcRequest
-     * @param serviceName
-     * @return
+     * @param rpcRequest rpc请求
+     * @return 调用结果
      */
     Object sendRequest(RpcRequest rpcRequest);
 
