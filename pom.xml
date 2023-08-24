@@ -12,7 +12,7 @@
         <module>rpc-api</module>
         <module>rpc-common</module>
         <module>rpc-core</module>
-        <module>test</module>
+        <module>rpc-test</module>
     </modules>
 
 
