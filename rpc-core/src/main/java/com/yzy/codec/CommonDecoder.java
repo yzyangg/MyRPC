@@ -67,7 +67,6 @@ public class CommonDecoder extends ReplayingDecoder<Object> {
         // 数据长度
         int length = byteBuf.readInt();
 
-
         byte[] bytes = new byte[length];
 
         // 数据
