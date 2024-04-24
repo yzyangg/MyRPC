@@ -35,9 +35,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
                 return;
             }
             logger.info("服务器接收到请求: {}", msg);
+            Thread.sleep(1000);
             Object result = requestHandler.handle(msg);
 
             if (channelHandlerContext.channel().isActive() && channelHandlerContext.channel().isWritable()) {
+                // 回写数据 带上请求ID
                 channelHandlerContext.writeAndFlush(RpcResponse.success(result, msg.getRequestId()));
             } else {
                 logger.error("通道不可写");

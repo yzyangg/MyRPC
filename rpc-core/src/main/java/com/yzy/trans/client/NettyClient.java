@@ -78,6 +78,7 @@ public class NettyClient implements RpcClient {
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
 
+        // 创建异步任务结果
         CompletableFuture<RpcResponse> future = new CompletableFuture<>();
         try {
             InetSocketAddress inetSocketAddress = serviceDiscovery.lookUpService(rpcRequest.getInterfaceName());
@@ -87,7 +88,7 @@ public class NettyClient implements RpcClient {
             }
 
 
-            // 获取channel
+            // 获取channel 客户端与服务端建立连接后 会把获得的channel put到ChannelProvider中
             Channel channel = ChannelProvider.get(inetSocketAddress, serializer);
             if (channel == null || !channel.isActive()) {
                 logger.error("未连接到服务器，发送消息失败");
@@ -95,7 +96,7 @@ public class NettyClient implements RpcClient {
                 return null;
             }
 
-            // 放入未处理的请求类之中
+            // 放入未处理任务中 requestId -> future
             unprocessedRequests.put(rpcRequest.getRequestId(), future);
 
             // 发送请求，添加回调函数
@@ -107,10 +108,12 @@ public class NettyClient implements RpcClient {
                         } else {
                             logger.error("发送消息时有错误发生: ", one.cause());
                             one.channel().close();
+                            // 提前结束 异步任务结果是异常信息
                             future.completeExceptionally(one.cause());
                         }
                     });
         } catch (Exception e) {
+            // 抹除异常任务
             unprocessedRequests.remove(rpcRequest.getRequestId());
             logger.error("发送消息时有错误发生: ", e);
             Thread.currentThread().interrupt();

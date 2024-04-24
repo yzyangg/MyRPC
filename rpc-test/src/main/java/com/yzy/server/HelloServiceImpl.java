@@ -1,6 +1,7 @@
 package com.yzy.server;
 
 import com.yzy.annotation.Service;
+import com.yzy.api.Hello;
 import com.yzy.api.HelloObject;
 import com.yzy.api.HelloService;
 import org.slf4j.Logger;
@@ -19,6 +20,12 @@ public class HelloServiceImpl implements HelloService {
     @Override
     public String hello(HelloObject message) {
         logger.info("接收到消息：{}", message.getMessage());
+        return "RPC调用成功!";
+    }
+
+    @Override
+    public String hello(Hello hello) {
+        logger.info("接收到消息：{}", hello.getMsg());
         return "RPC调用成功!";
     }
 }

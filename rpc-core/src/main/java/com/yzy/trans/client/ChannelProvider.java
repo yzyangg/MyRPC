@@ -88,7 +88,7 @@ public class ChannelProvider {
      */
     private static Channel connect(InetSocketAddress inetSocketAddress) throws ExecutionException, InterruptedException {
         CompletableFuture<Channel> completableFuture = new CompletableFuture<>();
-        // 异步连接服务端
+        // 异步连接服务端 返回channel
         bootstrap.connect(inetSocketAddress).addListener((ChannelFutureListener) channelFuture -> {
             if (channelFuture.isSuccess()) {
                 logger.info("客户端连接成功");
@@ -98,6 +98,7 @@ public class ChannelProvider {
                 throw new IllegalStateException();
             }
         });
+        // 返回channel
         return completableFuture.get();
     }
 

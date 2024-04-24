@@ -8,4 +8,6 @@ package com.yzy.api;
  */
 public interface HelloService {
     String hello(HelloObject message);
+
+    String hello(Hello hello);
 }

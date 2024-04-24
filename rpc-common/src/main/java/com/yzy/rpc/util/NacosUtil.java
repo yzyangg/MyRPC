@@ -77,7 +77,7 @@ public class NacosUtil {
     }
 
     /**
-     * 获得服务
+     * 注销服务
      */
     public static void clearRegistry() {
         if (!serviceNames.isEmpty() && address != null) {

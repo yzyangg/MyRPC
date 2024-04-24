@@ -49,9 +49,12 @@ public class NettyServer extends AbstractRpcServer {
     @Override
     public void start() {
         ShutDownHook.getShutDownHook().addClearAllHock();
+        // boss 负责接受连接
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
+        // worker 负责读写
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 
+        // Server启动器
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         try {
             serverBootstrap.group(bossGroup, workerGroup)
@@ -73,8 +76,10 @@ public class NettyServer extends AbstractRpcServer {
             ChannelFuture future;
             // 阻塞直到绑定成功
             future = serverBootstrap.bind(host, port).sync();
+            logger.info("服务器启动在{}端口", port);
             // 阻塞直到服务器channel关闭
             future.channel().closeFuture().sync();
+            logger.info("服务器在{}端口已关闭", port);
         } catch (InterruptedException e) {
             logger.error("启动服务器时有错误发生: ", e);
             throw new RpcException(RpcError.SERVER_STARTUP_FAILURE);

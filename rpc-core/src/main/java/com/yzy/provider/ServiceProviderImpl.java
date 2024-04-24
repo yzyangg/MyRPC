@@ -11,13 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yzy
- * @version 1.0
- * @description 服务提供类
+ * @description 服务提供者
  * @date 2023/8/22 16:53
  */
 public class ServiceProviderImpl implements ServiceProvider {
     public static final Logger logger = LoggerFactory.getLogger(ServiceProviderImpl.class);
+    // 服务容器
     public static final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
+    // 服务名字容器
     public static final Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
 

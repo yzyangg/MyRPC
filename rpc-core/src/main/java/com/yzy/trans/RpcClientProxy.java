@@ -78,6 +78,7 @@ public class RpcClientProxy implements InvocationHandler {
             logger.error("方法调用请求发送失败", e);
             return null;
         }
+        System.out.println("我可以运行到这里吗?");
         MessageChecker.check(rpcRequest, rpcResponse);
 
         return rpcResponse.getData();

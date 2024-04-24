@@ -13,7 +13,10 @@ import com.yzy.trans.server.NettyServer;
 @ServiceScan
 public class NettyTestServer {
     public static void main(String[] args) {
+        // 扫描@Service服务 通过NamingService注册到Nacos
         NettyServer nettyServer = new NettyServer("localhost", 9999, CommonSerializer.DEFAULT_SERIALIZER);
+
+        // 通过Bootstrap启动 创建BossEventGroup WorkerEventGroup
         nettyServer.start();
     }
 }

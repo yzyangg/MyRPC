@@ -17,19 +17,24 @@ public class SingletonFactory {
 
     /**
      * 双检索单例模式
+     *
      * @param clazz
-     * @return
      * @param <T>
+     * @return
      */
     public static <T> T getInstance(Class<T> clazz) {
         Object instance = objectMap.get(clazz);
-        synchronized (clazz) {
-            if (instance == null) {
-                try {
-                    instance = clazz.newInstance();
-                    objectMap.put(clazz, instance);
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
+
+
+        if (instance == null) {
+            synchronized (clazz) {
+                if (instance == null) {
+                    try {
+                        instance = clazz.newInstance();
+                        objectMap.put(clazz, instance);
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

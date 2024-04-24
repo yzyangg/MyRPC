@@ -2,6 +2,7 @@ package com.yzy.trans.dto;
 
 import com.yzy.rpc.entity.RpcResponse;
 
+import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,8 +45,10 @@ public class UnprocessedRequests {
      * @param rpcResponse
      */
     public void complete(RpcResponse rpcResponse) {
+        // 这个任务已经完成了 需要从map中抹除
         CompletableFuture<RpcResponse> future = UNPROCESSED_RESPONSE_FUTURE.remove(rpcResponse.getRequestId());
         if (null != future) {
+            // 结果写入future中
             future.complete(rpcResponse);
         } else {
             throw new IllegalStateException();

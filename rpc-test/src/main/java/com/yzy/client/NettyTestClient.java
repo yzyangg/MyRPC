@@ -1,6 +1,6 @@
 package com.yzy.client;
 
-import com.yzy.api.HelloObject;
+import com.yzy.api.Hello;
 import com.yzy.api.HelloService;
 import com.yzy.serializer.CommonSerializer;
 import com.yzy.trans.RpcClient;
@@ -18,8 +18,9 @@ public class NettyTestClient {
         RpcClient client = new NettyClient(CommonSerializer.DEFAULT_SERIALIZER);
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        HelloObject message = new HelloObject(12, "This is a message");
-        String res = helloService.hello(message);
+        Hello hello = new Hello();
+        hello.setMsg("hello");
+        String res = helloService.hello(hello);
         System.out.println(res);
     }
 }
